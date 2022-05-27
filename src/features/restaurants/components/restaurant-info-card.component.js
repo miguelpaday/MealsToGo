@@ -7,9 +7,14 @@ import {
   Paragraph,
   Title,
 } from "react-native-paper";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text } from "react-native";
+import styled from "styled-components/native";
 import { colors } from "../../../utils/colors";
 import { spacing } from "../../../utils/sizes";
+
+const StyledTitle = styled(Title)`
+  font-size: 20px;
+`;
 
 const CardLeftContent = (props) => (
   <Avatar.Image
@@ -76,7 +81,7 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
             source={{ uri: photos[0] }}
           />
           <Card.Content>
-            <Title>{name}</Title>
+            <StyledTitle>{name}</StyledTitle>
             <Paragraph>{address}</Paragraph>
           </Card.Content>
         </Card>
