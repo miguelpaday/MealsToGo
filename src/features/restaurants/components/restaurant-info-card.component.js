@@ -1,19 +1,63 @@
 import React from "react";
-import {
-  Avatar,
-  Button,
-  Card,
-  IconButton,
-  Paragraph,
-  Title,
-} from "react-native-paper";
-import { StyleSheet, Text } from "react-native";
+import { Avatar, Card, IconButton, Title } from "react-native-paper";
+import { Text, View, Image } from "react-native";
 import styled from "styled-components/native";
-import { colors } from "../../../utils/colors";
-import { spacing } from "../../../utils/sizes";
+import Svg, { SvgXml } from "react-native-svg";
+import star from "../../../../assets/icons/starRating";
+import openRestaurant from "../../../../assets/icons/openRestaurant";
+import { Spacer } from "./spacer/spacer.component";
 
-const StyledTitle = styled(Title)`
-  font-size: 20px;
+const RestaurantCard = styled(Card)`
+  background-color: ${(props) => props.theme.colors.bg.primary};
+  elevation: 5;
+`;
+
+const RestaurantCardCover = styled(Card.Cover)`
+  background-color: ${(props) => props.theme.colors.bg.primary};
+  padding: ${(props) => props.theme.space[3]};
+  padding-bottom: 0;
+`;
+
+const RestaurantCardContent = styled(Card.Content)`
+  padding: ${(props) => props.theme.space[3]};
+`;
+
+const RestaurantTitle = styled(Title)`
+  font-family: ${(props) => props.theme.fonts.heading};
+  font-size: ${(props) => props.theme.fontSizes.title};
+  color: ${(props) => props.theme.colors.ui.primary};
+  margin: 0;
+  padding: 0;
+`;
+
+const RestaurantAddress = styled(Text)`
+  font-family: ${(props) => props.theme.fonts.body};
+  font-size: ${(props) => props.theme.fontSizes.body};
+`;
+
+const Rating = styled(View)`
+  flex-direction: row;
+  margin-top: ${(props) => props.theme.space[2]};
+  margin-bottom: ${(props) => props.theme.space[2]};
+`;
+
+const Section = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const SectionRight = styled(View)`
+  flex-direction: column;
+`;
+
+const OpenIcon = styled(SvgXml)`
+  width: 30px;
+  height: 30px;
+`;
+
+const Icon = styled(Image)`
+  width: 30px;
+  height: 30px;
 `;
 
 const CardLeftContent = (props) => (
@@ -29,14 +73,16 @@ const CardRightContent = (props) => {
 
 export const RestaurantInfoCard = ({ restaurant = {} }) => {
   const {
-    name = "Eat & Drink Indian Restaurant",
-    icon,
+    name = "McDonald's",
+    icon = "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
     photos = ["https://picsum.photos/700"],
     address = "Dubai, UAE",
-    isOpenNow = "true",
+    isOpenNow = false,
     rating = 4,
-    isClosedTemporarily,
+    isClosedTemporarily = false,
   } = restaurant;
+
+  const ratingArray = Array.from(new Array(Math.floor(rating)));
 
   return (
     <>
@@ -74,32 +120,39 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
       </Card> */}
       </>
       <>
-        <Card elevation={5} style={styles.card}>
-          <Card.Cover
-            key={name}
-            style={styles.cardCover}
-            source={{ uri: photos[0] }}
-          />
-          <Card.Content>
-            <StyledTitle>{name}</StyledTitle>
-            <Paragraph>{address}</Paragraph>
-          </Card.Content>
-        </Card>
+        <RestaurantCard>
+          <RestaurantCardCover key={name} source={{ uri: photos[0] }} />
+          <RestaurantCardContent>
+            <Section>
+              <RestaurantTitle>{name}</RestaurantTitle>
+              <SectionRight>
+                <Icon source={{ uri: icon }} />
+              </SectionRight>
+            </Section>
+            <Section>
+              <Rating>
+                {ratingArray.map((value, index) => (
+                  <SvgXml key={index} width={20} height={20} xml={star} />
+                ))}
+              </Rating>
+              <SectionRight>
+                <Spacer position="top" size="medium">
+                  {!isClosedTemporarily ? (
+                    isOpenNow ? (
+                      <OpenIcon xml={openRestaurant} />
+                    ) : (
+                      <Text>Temporarily Closed</Text>
+                    )
+                  ) : (
+                    <Text>Temporarily Closed</Text>
+                  )}
+                </Spacer>
+              </SectionRight>
+            </Section>
+            <RestaurantAddress>{address}</RestaurantAddress>
+          </RestaurantCardContent>
+        </RestaurantCard>
       </>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    elevation: 10,
-    overflow: "hidden",
-  },
-  cardCover: {
-    backgroundColor: colors.white,
-    padding: spacing.md,
-  },
-  cardTitle: {
-    backgroundColor: "rgba(150,50,0,0.1)",
-  },
-});

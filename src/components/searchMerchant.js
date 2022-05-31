@@ -1,9 +1,13 @@
 import { Searchbar } from "react-native-paper";
+import styled from "styled-components/native";
+
+const StyledSearchBar = styled(Searchbar)`
+  elevation: 5;
+`;
 
 export const SearchMerchant = (props) => {
   return (
-    <Searchbar
-      style={{ elevation: 10 }}
+    <StyledSearchBar
       icon="store-search-outline"
       placeholder="Search"
       onIconPress={() => {
@@ -12,6 +16,6 @@ export const SearchMerchant = (props) => {
       onChangeText={(text) => {
         props.setSearchText(text);
       }}
-    ></Searchbar>
+    ></StyledSearchBar>
   );
 };

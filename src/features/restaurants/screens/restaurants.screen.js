@@ -1,9 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, SafeAreaView, StatusBar } from "react-native";
+import { View, SafeAreaView, StatusBar } from "react-native";
 import { SearchMerchant } from "../../../components/searchMerchant";
-import { colors } from "../../../utils/colors";
-import { spacing } from "../../../utils/sizes";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
+import styled from "styled-components";
+
+const RestaurantSafeAreaview = styled(SafeAreaView)`
+  ${StatusBar.currentHeight && `margin-top: ${StatusBar.currentHeight}px`};
+  background-color: ${(props) => props.theme.colors.bg.primary};
+  flex: 1;
+`;
+
+const SearchContainerView = styled(View)`
+  padding: ${(props) => props.theme.space[3]};
+  padding-bottom: 0;
+`;
+
+const ListContainerView = styled(View)`
+  padding: ${(props) => props.theme.space[3]};
+  flex: 1;
+`;
 
 export const RestaurantScreen = () => {
   const [searchText, setSearchText] = useState(null);
@@ -15,28 +30,13 @@ export const RestaurantScreen = () => {
   }, [searchText]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.searchContainer}>
+    <RestaurantSafeAreaview>
+      <SearchContainerView>
         <SearchMerchant setSearchText={setSearchText}></SearchMerchant>
-      </View>
-      <View style={styles.listContainer}>
+      </SearchContainerView>
+      <ListContainerView>
         <RestaurantInfoCard />
-      </View>
-    </SafeAreaView>
+      </ListContainerView>
+    </RestaurantSafeAreaview>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: StatusBar.currentHeight,
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  searchContainer: {
-    padding: spacing.md,
-  },
-  listContainer: {
-    padding: spacing.md,
-    flexGrow: 1,
-  },
-});
